@@ -172,14 +172,14 @@ impl<'a> Lexer<'a> {
 
         unsafe {
             // Safety: cur() is Some(c), if this method is called.
-            self.input.bump();
+            self.input.bump(1);
         }
 
         // '++', '--'
         Ok(if self.input.cur() == Some(C) {
             unsafe {
                 // Safety: cur() is Some(c)
-                self.input.bump();
+                self.input.bump(1);
             }
 
             // Handle -->
@@ -216,7 +216,7 @@ impl<'a> Lexer<'a> {
 
         unsafe {
             // Safety: cur() is Some(c) if this method is called.
-            self.input.bump();
+            self.input.bump(1);
         }
 
         Ok(if self.input.eat_byte(b'=') {
@@ -259,7 +259,7 @@ impl Lexer<'_> {
     fn read_token_lt_gt<const C: u8>(&mut self) -> LexResult<Token> {
         let had_line_break_before_last = self.had_line_break_before_last();
         let start = self.cur_pos();
-        self.bump();
+        self.bump(1);
 
         if self.syntax.typescript()
             && self.ctx.contains(Context::InType)
@@ -293,7 +293,7 @@ impl Lexer<'_> {
 
         // '<<', '>>'
         if self.cur() == Some(C) {
-            self.bump();
+            self.bump(1);
             op = if C == b'<' {
                 BinOpToken::LShift
             } else {
@@ -302,7 +302,7 @@ impl Lexer<'_> {
 
             //'>>>'
             if C == b'>' && self.cur() == Some(C) {
-                self.bump();
+                self.bump(1);
                 op = BinOpToken::ZeroFillRShift;
             }
         }
