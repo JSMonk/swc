@@ -190,7 +190,7 @@ fn resolve_output_file_path(
     // 2. Relative to cwd, traverse up      : ../repo/some/dir/b.js
     // 3. Absolute path, relative to cwd: /c/github/swc/crates/swc/tests/serde/a.js
     // 4. Absolute path, not relative to cwd: /c/github/repo/some/dir/b.js
-    //
+//
     // OutDir
     // a. Relative to cwd: ./dist
     // b. Relative to cwd, traverse up: ../outer_dist
@@ -228,7 +228,7 @@ fn emit_output(
         }
 
         if let Some(ref source_map) = output.map {
-            let source_map_path = output_file_path.with_extension("js.map");
+            let source_map_path = output_file_path.with_added_extension("map");
 
             output.code.push_str("\n//# sourceMappingURL=");
             output
@@ -242,7 +242,7 @@ fn emit_output(
 
         if let Some(extra) = &output.output {
             let mut extra: serde_json::Map<String, serde_json::Value> =
-                serde_json::from_str(extra).context("failed to parse extra output")?;
+            serde_json::from_str(extra).context("failed to parse extra output")?;
 
             if let Some(dts_code) = extra.remove("__swc_isolated_declarations__") {
                 let dts_file_path = output_file_path.with_extension("d.ts");
